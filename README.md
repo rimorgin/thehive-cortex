@@ -4,9 +4,6 @@ With this docker-compose.yml you will be able to run the following images:
 - Cassandra 3.11
 - Cortex 3.1.0-1
 - Elasticsearch 7.11.1
-- MISP 2.4.134
-- Mysql 8.0.22
-- Redis 6.0.9
 
 ## Some Hint
 
@@ -42,10 +39,6 @@ Structure would look like:
     ├── elasticsearch_data
     ├── elasticsearch_logs
     ├── index
-    ├── mysql
-    ├── shuffle-apps
-    ├── shuffle-database
-    └── shuffle-files
 ```
 If you run docker-compose with sudo, ensure you have created vol/elasticsearch_data and vol/elasticsearch_logs folders with non root user, otherwise elasticsearch container will not start.
 In the same way permission must be granted to vol/index folder or thehive container will raise issues.
@@ -118,18 +111,6 @@ Adjust depending on your needs and your env. Without these settings in my enviro
 - MISP connection is https, in order to skip the verify of self signed certificate have do add this setting in the hive application.conf under MISP section:
   ``` wsConfig { ssl { loose { acceptAnyCertificate: true } } } ```
  
-### MISP
-- login with default credentials: admin@admin.test // admin
-- request change password
-- go in Automation page and grab the api key to use in the hive application.conf to receive alerts from MISP or to use in MISP analyzers inside Cortex.
-
-### SHUFFLE
-To test automation I choose SHUFFLE (https://shuffler.io/)
-
-In docker-compose.yml , after the comment "#READY FOR AUTOMATION ? " there is part dedicated to Shuffle (you can remove as the others if not needed)
-Here will not document how to use it, there is already documentation (https://shuffler.io/docs/about).
-
-Here just describe how to connect the things together.
 
 - After SHUFFLE starts, go at login page (the frontend port by default is 3001), put credentials choosen in docker-compose.yml , for your convenience I set admin // password , create your first workflow, can be anything you have in mind, then go in Triggers, place Webhook node on dashboard, select it and grab the Webhook URI. it will be something like http://192.168.29.1:3001/api/v1/hooks/webhook_0982214b-3b92-4a85-b6fa-771982c2b449
 - Go in applicaiton.conf of The Hive and modify the url under webhook notification part:
@@ -171,8 +152,6 @@ In conclusion, after execute ```sudo docker-compose up``` you will have the foll
 | The Hive |  http://localhost:9000 | admin@thehive.local | secret
 | Cortex |    http://localhost:9001  |    |
 | Elasticsearch | http://localhost:9200 |     |
-| Kibana |  http://localhost:5601 |  |
-| MISP |    https://localhost:443   |  admin@admin.test | admin
 
 
 
